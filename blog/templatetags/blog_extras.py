@@ -18,3 +18,23 @@ def author_details(author, current_user=None):
     name = f"{author.first_name} {author.last_name}" if has_first_and_last_name else f"{author.username}"
 
     return format_html('<a href="mailto:{}">{}</a>', author.email, name) if author.email else name
+
+
+@register.simple_tag(name="row")
+def row(extra_classes=""):
+    return format_html('<div class="row {}">', extra_classes)
+
+
+@register.simple_tag(name="endrow")
+def endrow():
+    return format_html("</div>")
+
+
+@register.simple_tag
+def col(extra_classes=""):
+    return format_html('<div class="col {}">', extra_classes)
+
+
+@register.simple_tag
+def endcol():
+    return format_html("</div>")
