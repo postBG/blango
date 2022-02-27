@@ -119,7 +119,7 @@ class Dev(Configuration):
 
     LANGUAGE_CODE = 'en-us'
 
-    TIME_ZONE = values.Value("UTC")
+    TIME_ZONE = values.Value("UTC", environ_prefix="BLANGO")
 
     USE_I18N = True
 
