@@ -11,8 +11,10 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import os
 from pathlib import Path
+
 from configurations import Configuration
 from configurations import values
+import dj_database_url
 
 
 class Dev(Configuration):
@@ -27,9 +29,9 @@ class Dev(Configuration):
     SECRET_KEY = 'django-insecure-+sn%dpa!086+g+%44z9*^j^q-u4n!j(#wl)x9a%_1op@zz2+1-'
 
     # SECURITY WARNING: don't run with debug turned on in production!
-    DEBUG = True
+    DEBUG = values.BooleanValue(True)
 
-    ALLOWED_HOSTS = ['*']
+    ALLOWED_HOSTS = values.ListValue(["localhost", "0.0.0.0", ".codio.io"])
     X_FRAME_OPTIONS = 'ALLOW-FROM ' + os.environ.get('CODIO_HOSTNAME') + '-8000.codio.io'
     CSRF_COOKIE_SAMESITE = None
     CSRF_TRUSTED_ORIGINS = [os.environ.get('CODIO_HOSTNAME') + '-8000.codio.io']
@@ -86,13 +88,10 @@ class Dev(Configuration):
 
     # Database
     # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-        }
-    }
+    # The default database connection is read from DATABASE_URL, not DJANGO_DATABASES.
+    # The alternative database connection is read from ALTERNATIVE_DATABASE_URL.
+    # If you want to use alternative connection, you need to change the below code to dict.
+    DATABASES = values.DatabaseURLValue(f"sqlite:///{BASE_DIR}/db.sqlite3")
 
 
     # Password validation
@@ -141,3 +140,8 @@ class Dev(Configuration):
     # crispy_bootstrap5
     CRISPY_ALLOWED_TEMPLATE_PACKS = "bootstrap5"
     CRISPY_TEMPLATE_PACK = "bootstrap5"
+
+
+class Prod(Dev):
+    DEBUG = False
+    SECRET_KEY = values.SecretValue()
