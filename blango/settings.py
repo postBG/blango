@@ -12,7 +12,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 import os
 from pathlib import Path
 from configurations import Configuration
-
+from configurations import values
 
 
 class Dev(Configuration):
@@ -119,7 +119,7 @@ class Dev(Configuration):
 
     LANGUAGE_CODE = 'en-us'
 
-    TIME_ZONE = 'UTC'
+    TIME_ZONE = values.Value("UTC")
 
     USE_I18N = True
 
