@@ -12,6 +12,7 @@ from blog.models import Post
 logger = logging.getLogger(__name__)
 
 @cache_page(300)
+@vary_on_headers("Cookie")
 def index(request):
     posts = Post.objects.filter(published_at__lte=timezone.now())
     logger.debug("Got %d posts", len(posts))
