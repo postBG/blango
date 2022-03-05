@@ -169,6 +169,14 @@ class Dev(Configuration):
         'django.contrib.auth.hashers.PBKDF2SHA1PasswordHasher',
         'django.contrib.auth.hashers.BCryptSHA256PasswordHasher',
     ]
+    
+    CACHES = {
+        'default': {
+            'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
+            'LOCATION': 'unique-snowflake',
+        }
+    }
+
 
 class Prod(Dev):
     DEBUG = False
