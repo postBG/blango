@@ -18,7 +18,7 @@ def get_ip(request):
   return HttpResponse(request.META['REMOTE_ADDR'])
 
 def index(request):
-    posts = Post.objects.filter(published_at__lte=timezone.now()).select_related("author").defer("created_at", "modified_at")
+    posts = Post.objects.filter(published_at__lte=timezone.now()).select_related("author")
     logger.debug("Got %d posts", len(posts))
     return render(request, "blog/index.html", {"posts": posts})
 
