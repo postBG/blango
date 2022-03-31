@@ -10,7 +10,7 @@ from blog.api.serializers import PostSerializer
 
 
 @api_view(["GET", "POST"])
-def post_list(request):
+def post_list(request, format=None):
     if request.method == "GET":
         posts = Post.objects.all()
         return Response({"data": PostSerializer(posts, many=True).data})
@@ -27,9 +27,9 @@ def post_list(request):
 
 
 @api_view(["GET", "PUT", "DELETE"])
-def post_detail(request, pk):
+def post_detail(request, pk, format=None):
     try:
-        post = get_object_or_404(Post, pk=pk)
+        post = Post.objects.get(pk=pk)
     except Post.DoesNotExist:
         return Response(status=HTTPStatus.NOT_FOUND)
 
