@@ -13,6 +13,12 @@ class TagField(serializers.SlugRelatedField):
             self.fail(f"Tag value {data} is invalid")
 
 
+class TagSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = "__all__"
+
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User

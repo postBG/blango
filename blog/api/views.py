@@ -1,8 +1,13 @@
-from rest_framework import generics
+from rest_framework import generics, viewsets
 
-from blog.models import Post
+from blog.models import Post, Tag
 from blango_auth.models import User
-from blog.api.serializers import PostSerializer, UserSerializer, PostDetailSerializer
+from blog.api.serializers import (
+    PostSerializer,
+    UserSerializer,
+    PostDetailSerializer,
+    TagSerializer,
+)
 from blog.api.permissions import AuthorModifyOrReadOnly, IsAdminUserForObject
 
 
@@ -21,3 +26,8 @@ class UserDetail(generics.RetrieveAPIView):
     lookup_field = "email"
     queryset = User.objects.all()
     serializer_class = UserSerializer
+
+
+class TagViewSet(viewsets.ModelViewSet):
+    queryset = Tag.objects.all()
+    serializer_class = TagSerializer
