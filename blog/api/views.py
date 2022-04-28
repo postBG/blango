@@ -1,3 +1,6 @@
+from datetime import timedelta
+
+from django.http import Http404
 from django.db.models import Q
 from django.utils import timezone
 from django.utils.decorators import method_decorator
@@ -46,14 +49,36 @@ class PostViewSet(viewsets.ModelViewSet):
 
     def get_queryset(self):
         if self.request.user.is_anonymous:
-            return self.queryset.filter(published_at__lte=timezone.now())
+            queryset = self.queryset.filter(published_at__lte=timezone.now())
+        elif self.request.user.is_staff:
+            queryset = self.queryset
+        else:
+            queryset = self.queryset.filter(
+                Q(published_at__lte=timezone.now()) | Q(author=self.request.user)
+            )
 
-        if self.request.user.is_staff:
-            return self.queryset
+        time_period_name = self.kwargs.get("period_name")
 
-        return self.queryset.filter(
-            Q(published_at__lte=timezone.now()) | Q(author=self.request.user)
-        )
+        if not time_period_name:
+            return queryset
+        
+        if time_period_name == "new":
+            return queryset.filter(
+                published_at__gte=timezone.now() - timedelta(hours=1)
+            )
+        elif time_period_name == "today":
+            return queryset.filter(
+                published_at__date=timezone.now().date()
+            )
+        elif time_period_name == "week":
+            return queryset.filter(
+                published_at__gte=timezone.now() - timedelta(days=7)
+            )
+        else:
+            return Http404(
+                f"Time period {time_period_name} is not valid, should be "
+                f"'new', 'today' or 'week'"
+            )
 
 
 class UserDetail(generics.RetrieveAPIView):
