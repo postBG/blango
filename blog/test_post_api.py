@@ -13,7 +13,7 @@ from blog.models import Post
 class PostApiTestCase(TestCase):
     def	setUp(self):
         self.u1	= get_user_model().objects.create_user(email="test@example.com",	password="password")
-		self.u2	= get_user_model().objects.create_user(email="test2@example.com",	password="password2")
+        self.u2	= get_user_model().objects.create_user(email="test2@example.com",	password="password2")
         
         posts = [
             Post.objects.create(
@@ -42,22 +42,22 @@ class PostApiTestCase(TestCase):
 
     def	test_post_list(self): 								
         resp = self.client.get("/api/v1/posts/")
-        data = resp.json()
+        data = resp.json()["results"]
         
         self.assertEqual(len(data),	2)
 								
         for	post_dict in data:
-            post_obj = self.post_lookup[post_dict["id"]] 												
-            self.assertEqual(post_obj.title, post_dict["title"]) 												
-            self.assertEqual(post_obj.slug,	post_dict["slug"]) 												
-            self.assertEqual(post_obj.summary, post_dict["summary"]) 												
+            post_obj = self.post_lookup[post_dict["id"]]
+            self.assertEqual(post_obj.title, post_dict["title"])
+            self.assertEqual(post_obj.slug,	post_dict["slug"])
+            self.assertEqual(post_obj.summary, post_dict["summary"])
             self.assertEqual(post_obj.content, post_dict["content"])
-            self.assertTrue(post_dict["author"].endswith(f"/api/v1/users/{post_obj.author.email}") 												
+            self.assertTrue(post_dict["author"].endswith(f"/api/v1/users/{post_obj.author.email}"))
             self.assertEqual(
                 post_obj.published_at,
                 datetime.strptime(
                     post_dict["published_at"], 
-                    "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=UTC),
+                    "%Y-%m-%dT%H:%M:%S.%fZ").replace(tzinfo=UTC)
             )
 
     def	test_unauthenticated_post_create(self):
