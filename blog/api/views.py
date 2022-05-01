@@ -20,12 +20,14 @@ from blog.api.serializers import (
     TagSerializer,
 )
 from blog.api.permissions import AuthorModifyOrReadOnly, IsAdminUserForObject
+from blog.api.filters import PostFilterSet
 
 
 class PostViewSet(viewsets.ModelViewSet):
-    filterset_fields = ["author", "tags"]
     permission_classes = [AuthorModifyOrReadOnly | IsAdminUserForObject]
     queryset = Post.objects.all()
+    filterset_class = PostFilterSet
+    ordering_fields = ["published_at", "author", "title", "slug"]
 
     @method_decorator(cache_page(120))
     @method_decorator(vary_on_headers("Authorization", "Cookie"))
