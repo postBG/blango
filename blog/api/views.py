@@ -23,6 +23,7 @@ from blog.api.permissions import AuthorModifyOrReadOnly, IsAdminUserForObject
 
 
 class PostViewSet(viewsets.ModelViewSet):
+    filterset_fields = ["author", "tags"]
     permission_classes = [AuthorModifyOrReadOnly | IsAdminUserForObject]
     queryset = Post.objects.all()
 
