@@ -64,7 +64,8 @@ class Dev(Configuration):
         'rest_framework',
         'rest_framework.authtoken',
         'drf_yasg',
-        'django_filters'
+        'django_filters',
+        'versatileimagefield'
     ]
 
     MIDDLEWARE = [
@@ -246,6 +247,9 @@ class Dev(Configuration):
             "Basic": {"type": "basic"},
         }
     }
+
+    MEDIA_ROOT = BASE_DIR / "media"
+    MEDIA_URL = "/media/"
 
 
 class Prod(Dev):
