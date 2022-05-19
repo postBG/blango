@@ -29,3 +29,9 @@ class ClickButton extends React.Component {
     )
   }
 }
+
+const domContainer = document.getElementById('react_root')
+ReactDOM.render(
+  React.createElement(ClickButton),
+  domContainer
+)
